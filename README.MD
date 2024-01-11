@@ -57,7 +57,7 @@ In `index.js` we have a code fragment that looks like this:
       const overrideContent = fs.readFileSync(path.join(__dirname, "overrides", "example-js-of-interest.js"), "utf8");
       interceptedRequest.respond({
         status: 200,
-        contentType: "application/javascript; charset=utf-8",
+        contentType: "text/javascript; charset=utf-8",
         body: overrideContent
       });
       return;
