@@ -11,10 +11,10 @@ const CWV = require("./src/CWV");
 const DeviceEmulation = require("./src/DeviceEmulation");
 
 // TODO, Change here to the element you would like Puppeteer to interact with.
-const elementToInteractWith = "### ADD THE CSS SELECTOR HERE ###";
+const elementToInteractWith = ".input-group-field.ng-pristine.ng-valid";
 
 // TODO, Change here to the url you would like to load in Puppeteer.
-const navigateTo = "https://www.example.com/";
+const navigateTo = "https://pti.icann.org/";
 
 var args = process.argv.slice(2);
 
@@ -39,6 +39,26 @@ else {
   const browser = await puppeteer.launch({ headless: false });
 
   const page = await browser.newPage();
+
+  // scroll to simulate interaction
+  async function autoScroll(page){
+    await page.evaluate(async () => {
+        await new Promise((resolve) => {
+            var totalHeight = 0;
+            var distance = 10;
+            var timer = setInterval(() => {
+                var scrollHeight = document.body.scrollHeight;
+                window.scrollBy(0, distance);
+                totalHeight += distance;
+
+                if(totalHeight >= scrollHeight - window.innerHeight){
+                    clearInterval(timer);
+                    resolve();
+                }
+            }, 100);
+        });
+    });
+  };
 
   if (recording) {
     // Configure the screen recorder
@@ -94,6 +114,9 @@ else {
 
   // Wait for a specified timeout in milliseconds
   await page.waitForTimeout(5000); // waits for 5 seconds
+
+  // Simulate user-interaction
+  await autoScroll(page);
 
   // Wait for the element to be present in the DOM
   await page.waitForSelector(elementToInteractWith);
