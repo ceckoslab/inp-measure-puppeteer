@@ -11,11 +11,10 @@ const CWV = require("./src/CWV");
 const DeviceEmulation = require("./src/DeviceEmulation");
 
 // TODO, Change here to the element you would like Puppeteer to interact with.
-const elementToInteractWith = "A.wp-block-button__link";
+const elementToInteractWith = "### ADD THE CSS SELECTOR HERE ###";
 
 // TODO, Change here to the url you would like to load in Puppeteer.
-//add ?nowprocket=1 to override wp rocket
-const navigateTo = "https://www.spendwithpennies.com/";
+const navigateTo = "https://www.example.com/";
 
 var args = process.argv.slice(2);
 
@@ -94,7 +93,10 @@ else {
   await Cookies.setOptanonConsent(page);
 
   // Wait for a specified timeout in milliseconds
-  await page.waitForTimeout(5000); // waits for 5 seconds
+  await page.waitForTimeout(2500); // waits for 2.5 seconds
+
+  // Simulate user-interaction
+  await autoScroll(page);
 
   // Wait for the element to be present in the DOM
   await page.waitForSelector(elementToInteractWith);
@@ -103,7 +105,7 @@ else {
   await page.click(elementToInteractWith);
   await page.focus(elementToInteractWith);
 
-  await page.waitForTimeout(5); // waits for 5 seconds
+  await page.waitForTimeout(2500); // waits for 2.5 seconds
 
   // Execute JS code after the timeout
   await page.evaluateHandle(() => {
@@ -132,3 +134,25 @@ else {
   // that would ensure all metrics have been captured.
   await browser.close();
 })();
+
+// scroll to simulate interaction
+async function autoScroll(page){
+  await page.evaluate(async () => {
+      await new Promise((resolve) => {
+        // page height 
+          var totalHeight = 0;
+          //scroll distance
+          var distance = 55;
+          var timer = setInterval(() => {
+              var scrollHeight = document.body.scrollHeight;
+              window.scrollBy(0, distance);
+              totalHeight += distance;
+
+              if(totalHeight >= scrollHeight - window.innerHeight){
+                  clearInterval(timer);
+                  resolve();
+              }
+          }, 100);
+      });
+  });
+};
