@@ -6,7 +6,7 @@ Utilizes the source code available the [Web Vitals](https://github.com/GoogleChr
 
 ## Configure
 
-Tweak the following lines in `index.js`:
+Tweak the following lines in `index.js` or `index_int.js`(if you wan to simulate user-interaction):
 
 ```
 // TODO, Change here to the element you would like Puppeteer to interact with.
@@ -19,7 +19,7 @@ const navigateTo = "https://www.example.com/";
 ## How to run?
 
  1. From the root folder of the project run `npm init` 
- 2. Run `node index.js`
+ 2. Run `node index.js` or `node index_int.js`
 
 When we run the project a browser will open and we will observe a simulation of user journey.
 
@@ -35,6 +35,8 @@ inp: 264
 ## Measure many times after a change:
 
 We have a shell script that can run a simulation multiple times. At the moment we run a simulation 10 times.
+
+Change `index.js` for `index_int.js` if you want to run many user-interaction simulations.
 
 Try:
 
